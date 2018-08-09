@@ -1,0 +1,20 @@
+.fifteen-game {
+  &__board{
+    height:350px;
+    width:350px;
+    display:flex;
+    flex-wrap:wrap;
+  }
+  &__piece{
+    width:80px;
+    height:80px;
+    line-height:80px;
+    text-align:center;
+  }
+  &__score-board{
+    height:25px;
+  }
+  &__button-row{
+    height:25px;
+  }
+}
