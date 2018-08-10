@@ -1,3 +1,5 @@
 <div class='fifteen-game__board'>
-  <GamePiece v-for="p in 15" :key="p" :identifier='p' />
+  <transition-group name="game" tag="div">
+    <GamePiece v-for="c in coordinates" :key='c.label' :identifier='c.label' :left='c.x' :top='c.y' />
+  </transition-group>
 </div>

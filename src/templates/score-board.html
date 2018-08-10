@@ -1,5 +1,17 @@
 <div class='fifteen-game__score-board'>
-  <dl>
+
+  <p v-if='searching'>
+    <strong>Shuffling...</strong>
+  </p>
+
+  <p v-else-if='moves === 0'>
+    <strong>Ready!</strong>
+  </p>
+
+  <dl v-else-if='!won'>
     <dt>Moves:</dt><dd>{{moves}}</dd>
   </dl>
+
+  <p v-else>You Won!</p>
+
 </div>
