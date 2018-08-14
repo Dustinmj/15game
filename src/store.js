@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { adjustCoordinates, getCoordinates, calculateMove, checkPuzzleSolvable } from './helpers/calculate';
+import {
+  adjustCoordinates,
+  getCoordinates,
+  calculateMove,
+  checkPuzzleSolvable,
+  moveByDirection } from './helpers/calculate';
 
 Vue.use(Vuex)
 
@@ -27,6 +32,9 @@ export default new Vuex.Store({
     },
     clearMoves ( state ) {
       state.moves = 0;
+    },
+    setWon ( state, bool ) {
+      state.won = bool;
     }
   },
   actions: {
@@ -39,28 +47,38 @@ export default new Vuex.Store({
       coords = adjustCoordinates( coords, state.dimensions );
       commit( 'setCoordinates', coords );
       commit( 'clearMoves' );
+      commit( 'setWon', false );
       const solvable = checkPuzzleSolvable( coords, state.dimensions );
       if( !solvable ) {
-        setTimeout( () => dispatch( 'shuffle' ), 450 );
+        setTimeout( () => dispatch( 'shuffle' ), 650 );
       } else {
         commit( 'searching', false );
       }
     },
-    checkWin( { state } ) {
+    checkWin( { state, commit } ) {
       const coords = state.coordinates;
       for( let i = 0, z = 1; i < coords.length; i++, z++ ) {
-        if( coords[ i ].label !== z ) {
+        const label = parseInt( parseInt( coords[ i ].label ) );
+        if( label > 0 && label !== z ) {
           return;
         }
       }
-      state.won = true;
+      commit( 'setWon', true );
+    },
+    moveByDirection( { state, commit, dispatch }, direction ) {
+      if( state.won ) return;
+      const coords = moveByDirection( Vue, state.coordinates.slice(0), direction, state.dimensions );
+      dispatch( 'commitMove', coords );
     },
     move ( { state, commit, dispatch }, label ) {
       if( state.won ) return;
       const coords = calculateMove( Vue, state.coordinates.slice(0), label, state.dimensions );
+      dispatch( 'commitMove', coords );
+    },
+    commitMove ( { state, commit, dispatch }, coords ) {
       const delta = JSON.stringify( coords ) !== JSON.stringify( state.coordinates );
-      commit( 'setCoordinates', coords );
       if( delta ) {
+        commit( 'setCoordinates', coords );
         commit( 'addMove' );
         dispatch( 'checkWin' );
       }

@@ -1,0 +1,33 @@
+
+// ################# COLORS
+
+$silver: rgba( 96, 125, 139, 1 );
+$primary: desaturate( rgba( 40, 116, 166, 1 ), 40% );
+$secondary: rgba( 40, 116, 166, 1 );
+$background: rgba( 55, 55, 55, 1 );
+$gameBackground: rgba( 245, 245, 245, 1 );
+
+$winRed: rgba( 244, 67, 54, 1 );
+$winBlue: rgba( 79, 195, 247, 1 );
+$winGreen: rgba( 129, 199, 132, 1 );
+$winYellow: rgba( 255, 238, 88, 1 );
+$winOrange: rgba( 255, 112, 67, 1 );
+
+// ################# VARIABLES
+
+$gameSize: 120px;
+$gameLength: 4;
+$scoreRowHeight: 50px;
+$buttonRowHeight: 60px;
+
+
+// ################ CALCULATIONS
+
+$gameWidth: $gameSize * $gameLength;
+$gameHeight: $gameSize * $gameLength;
+$boardHeight: $gameHeight + $scoreRowHeight + $buttonRowHeight;
+
+// ############### FONTS
+
+@import url( 'https://fonts.googleapis.com/css?family=PT+Sans+Caption' );
+@import url( 'https://fonts.googleapis.com/css?family=Poiret+One' );

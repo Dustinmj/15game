@@ -1,7 +1,21 @@
+@import 'variables.scss';
+
+body {
+  background: $background;
+}
+
 #container {
-  width:350px;
-  height:400px;
+  width:$gameWidth;
+  padding:0 40px 10px;
   position: absolute;
+  border-radius: 20px;
   top: 50%; right: 50%;
-  transform: translate(50%,-50%);
+  transform: translate(50%,-60%);
+  background-color:$gameBackground;
+  border:15px solid $background;
+  &.red { border-color:$winRed; }
+  &.blue { border-color:$winBlue; }
+  &.green { border-color:$winGreen; }
+  &.orange { border-color:$winOrange; }
+  &.yellow { border-color:$winYellow; }
 }

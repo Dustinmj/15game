@@ -1,37 +1,50 @@
+@import 'variables.scss';
+
 .fifteen-game {
+  font-family: 'Poiret One', cursive;
+  font-size: 2em;
+  font-weight: bold;
   &__board{
-    height:350px;
-    width:350px;
+    height:$gameHeight;
+    width:$gameWidth;
     display:flex;
     flex-wrap:wrap;
     position:relative;
+    background:$gameBackground;
   }
   &__piece{
+    font-family: 'PT Sans Caption', sans-serif;
+    font-size: 18px;
     position:absolute;
-    left:0;
-    top:0;
-    width:80px;
-    height:80px;
-    line-height:80px;
+    font-size:1.25em;
+    font-weight:bold;
+    width:$gameSize;
+    height:$gameSize;
+    line-height:$gameSize;
     text-align:center;
     cursor:pointer;
+    color:#FFF;
+    border: 2px outset $silver;
+    box-sizing:border-box;
     &.even{
-      background-color:#147;
+      background-color:$primary;
     }
     &.odd{
-      background-color:#369;
+      background-color:$secondary;
     }
     &.blank{
       visibility:hidden;
     }
   }
   &__score-board{
-    height:25px;
+    height:$scoreRowHeight;
+    text-align:center;
+    font-weight:bold;
     dl {
       dt {
         font-weight:bold;
         display:inline-block;
-        width:60px;
+        width:3.2em;
       }
       dd {
         display:inline-block;
@@ -41,10 +54,32 @@
     }
   }
   &__button-row{
-    height:25px;
+    height:$buttonRowHeight;
+    font-weight:bold;
+    margin:20px 0 0;
+    text-align:center;
+    button {
+      cursor:pointer;
+      width:50%;
+      margin:0 auto;
+      &:hover {
+        background: linear-gradient(to bottom, #7db9e8 0%, $secondary 100%);
+        color:#FFF;
+        border: 1px solid $primary;
+      }
+    }
+  }
+}
+
+.won .fifteen-game, .shuffle .fifteen-game {
+  &__piece{
+    cursor:default;
+    &.odd {
+      background: $primary;
+    }
   }
 }
 
 .game-move {
-  transition: transform .125s;
+  transition: transform .375s;
 }

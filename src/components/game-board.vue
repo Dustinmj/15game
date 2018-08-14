@@ -23,7 +23,6 @@ export default {
     }
   },
   mounted () {
-    console.log( this )
     this.$store.commit( 'setDimensions', {
       width:this.width,
       height:this.height,

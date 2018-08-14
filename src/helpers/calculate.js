@@ -1,5 +1,7 @@
 'use strict'
 
+import config from '../config';
+
 export const getCoordinates = ( { width, height, length } ) => {
   const coords = [];
   for ( let i in [...Array( length * length).keys()] ) {
@@ -27,20 +29,46 @@ export const adjustCoordinates = ( coords, { width, height, length } ) => {
   return coords;
 }
 
-const swapValues = ( context, coords, from, to ) => {
-  const oldX = coords[ from ].x;
-  const oldY = coords[ from ].y;
-  coords[ from ].x = coords[ to ].x;
-  coords[ from ].y = coords[ to ].y;
-  coords[ to ].x = oldX;
-  coords[ to ].y = oldY;
-  const old = {
-    x: coords[ from ].x,
-    y: coords[ from ].y,
-    label: coords[ from ].label
-  };
-  context.set( coords, from, coords[ to ] );
-  context.set( coords, to, old );
+export const checkPuzzleSolvable = ( coords, { length } ) => {
+  const nIsOdd = length % 2 !== 0 && length !== 0;
+  const inversions = getInversions( coords );
+  if( inversions === 0 ) return true;
+  const inversionsAreEven = inversions % 2 === 0 && inversions !== 0;
+  if( nIsOdd ) {
+    return inversionsAreEven;
+  } else {
+    const blank = coords.findIndex( el => {
+      return el.label === -1;
+    });
+    // 1 indexed
+    const blankRow = Math.floor( blank / length ) + 1;
+    const lastRow = length;
+    const rowDelta = lastRow - blankRow;
+    const even = rowDelta !== 0 && rowDelta % 2 === 0;
+    return ( even && !inversionsAreEven ) || ( !even && inversionsAreEven );
+  }
+}
+
+export const moveByDirection = ( context, coords, direction, { length } ) => {
+  const blank = findBlank( coords );
+  let toMove;
+  switch( direction ) {
+    case config.DIRECTION_LEFT:
+      toMove = blank + 1;
+      break;
+    case config.DIRECTION_RIGHT:
+      toMove = blank - 1;
+      break;
+    case config.DIRECTION_UP:
+      toMove = blank + length;
+      break;
+    case config.DIRECTION_DOWN:
+      toMove = blank - length;
+      break;
+  }
+  if( toMove >= 0 && toMove < coords.length ) {
+    return calculateMove( context, coords, coords[ toMove ].label, { length } );
+  }
   return coords;
 }
 
@@ -50,9 +78,7 @@ export const calculateMove = ( context, coords, label, { length } ) => {
     return el.label === label;
   });
 
-  const blank = coords.findIndex( el => {
-    return el.label === -1;
-  });
+  const blank = findBlank( coords );
 
   if( index < 0 ) return coords;
 
@@ -75,6 +101,30 @@ export const calculateMove = ( context, coords, label, { length } ) => {
 
 }
 
+
+const swapValues = ( context, coords, from, to ) => {
+  const oldX = coords[ from ].x;
+  const oldY = coords[ from ].y;
+  coords[ from ].x = coords[ to ].x;
+  coords[ from ].y = coords[ to ].y;
+  coords[ to ].x = oldX;
+  coords[ to ].y = oldY;
+  const old = {
+    x: coords[ from ].x,
+    y: coords[ from ].y,
+    label: coords[ from ].label
+  };
+  context.set( coords, from, coords[ to ] );
+  context.set( coords, to, old );
+  return coords;
+}
+
+const findBlank = coords => {
+  return coords.findIndex( el => {
+    return el.label === -1;
+  });
+}
+
 const getInversions = coords => {
   let inversions = 0;
   for( let c in coords ) {
@@ -88,24 +138,4 @@ const getInversions = coords => {
     }
   }
   return inversions;
-}
-
-export const checkPuzzleSolvable = ( coords, { length } ) => {
-  const nIsOdd = length % 2 !== 0 && length !== 0;
-  const inversions = getInversions( coords );
-  if( inversions === 0 ) return true;
-  const inversionsAreEven = inversions % 2 === 0 && inversions !== 0;
-  if( nIsOdd ) {
-    return inversionsAreEven;
-  } else {
-    const blank = coords.findIndex( el => {
-      return el.label === -1;
-    });
-    // 1 indexed
-    const blankRow = Math.floor( blank / length ) + 1;
-    const lastRow = length;
-    const rowDelta = lastRow - blankRow;
-    const even = rowDelta !== 0 && rowDelta % 2 === 0;
-    return ( even && !inversionsAreEven ) || ( !even && inversionsAreEven );
-  }
 }
