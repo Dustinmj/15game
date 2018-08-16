@@ -22,11 +22,11 @@ export default {
         let color = 0;
         const interval = setInterval( () => {
           this.borderClass = config.WIN_COLORS[ color++ % config.WIN_COLORS.length ];
-        }, 35 );
+        }, 45 );
         setTimeout( () => {
           clearInterval( interval );
           this.borderClass = 'won';
-        }, 1200 );
+        }, 2500 );
       } else {
         this.borderClass = 'play';
       }

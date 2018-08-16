@@ -33,7 +33,7 @@ export const checkPuzzleSolvable = ( coords, { length } ) => {
   const nIsOdd = length % 2 !== 0 && length !== 0;
   const inversions = getInversions( coords );
   if( inversions === 0 ) return true;
-  const inversionsAreEven = inversions % 2 === 0 && inversions !== 0;
+  const inversionsAreEven = inversions % 2 === 0;
   if( nIsOdd ) {
     return inversionsAreEven;
   } else {
@@ -43,7 +43,7 @@ export const checkPuzzleSolvable = ( coords, { length } ) => {
     // 1 indexed
     const blankRow = Math.floor( blank / length ) + 1;
     const lastRow = length;
-    const rowDelta = lastRow - blankRow;
+    const rowDelta = ( lastRow - blankRow ) + 1;
     const even = rowDelta !== 0 && rowDelta % 2 === 0;
     return ( even && !inversionsAreEven ) || ( !even && inversionsAreEven );
   }
@@ -129,9 +129,9 @@ const getInversions = coords => {
   let inversions = 0;
   for( let c in coords ) {
     const coord = coords[ c ];
-    if( coord.label !== -1 ) {
+    if( coord.label > 0 ) {
       for( let i = c; i < coords.length; i++ ) {
-        if( coord.label > coords[ i ].label ) {
+        if( coords[ i ].label > 0 && coord.label > coords[ i ].label ) {
           ++inversions;
         }
       }

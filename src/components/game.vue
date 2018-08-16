@@ -23,6 +23,7 @@ export default {
       };
       const pressed = keys[ evt.keyCode || evt.which ];
       if( pressed ) {
+        this.keydown = true;
         this.$store.dispatch( 'moveByDirection', pressed );
       }
     }
