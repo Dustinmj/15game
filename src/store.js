@@ -41,8 +41,9 @@ export default new Vuex.Store({
     shuffle ( { state, commit, dispatch } ) {
       commit( 'searching', true );
       let coords = JSON.parse( JSON.stringify( state.coordinates ) );
+      console.log( coords )
       coords.sort(() => {
-        return Math.round( Math.random() );
+        return Math.round( Math.random() ) > 0 ? 1 : -1;
       });
       coords = adjustCoordinates( coords, state.dimensions );
       commit( 'setCoordinates', coords );
